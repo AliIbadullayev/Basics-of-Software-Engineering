@@ -1,0 +1,110 @@
+git init
+git config --global user.name "Alibaba"
+git config --global user.email ali.ibadullayev.02@gmail.com
+git add .
+git commit -m "Initial commit"
+git checkout -b "side_branch" 
+git add .
+git commit  --author="Arseny <arseny@gmail.com>" -m "Commit #1"
+git add .
+git commit  --author="Arseny <arseny@gmail.com>" -m "Commit #2"
+git add .
+git commit  --author="Arseny <arseny@gmail.com>" -m "Commit #3"
+git add .
+git commit  --author="Arseny <arseny@gmail.com>" -m "Commit #4"
+git checkout -b side_branch_2
+git rm "*"
+git add .
+git commit  --author="Arseny <arseny@gmail.com>" -m "Commit #5"
+git rm boTiV5IZAc.yt1 
+git add .
+git commit --author="Arseny <arseny@gmail.com>" -m "Commit #6"
+git add .
+git commit --author="Arseny <arseny@gmail.com>" -m "Commit #7"
+git checkout master
+git add .
+git commit -m "Commit #8"
+git checkout side_branch_2
+git add .
+git commit --author="Arseny <arseny@gmail.com>" -m "Commit #9"
+git checkout side_branch
+git merge side_branch_2
+git rm "*"
+git add .
+git commit --author="Arseny <arseny@gmail.com>" -m "Commit #10"
+git checkout master
+git add .
+git commit -m "Commit #11"
+git checkout side_branch
+git rm 3EUyKcp9Lr.WFZ 
+git add .
+git commit --author="Arseny <arseny@gmail.com>" -m "Commit #12"
+git checkout master
+git merge side_branch
+vim J.java 
+vim H.java 
+git add H.java J.java 
+git commit -m "Merged side_branch into main"
+git rm cKVORK4LWF.gCv 
+git add .
+git commit -m "Commit #13"
+git rm "*"
+git add .
+git commit -m "Commit #14"
+// Here is conflict 
+<<<<<<HEAD
+...
+...
+==========
+...
+...
+>>>>>>side_branch_2
+
+//we can redact our file in vim, delete the lines with code from <<<Head to ==== or from ==== to >>>side_branch_2
+
+//SVN
+svnadmin create svn_server
+svn mkdir -m "Create project structure" file:///home/s312200/misp/lab2/svn_server/branches file:///home/s312200/misp/lab2/svn_server/trunk
+svn checkout file:///home/s312200/misp/lab2/svn_server/trunk/ workCopy
+cd workCopy
+svn add *
+svn commit --username=Ali --password Ali -m "Commit #0"
+
+svn copy file:///home/s312200/misp/lab2/svn_server/trunk/ file:///home/s312200/misp/lab2/svn_server/branches/side_branch -m "Create side_branch"
+svn switch file:///home/s312200/misp/lab2/svn_server/branches/side_branch
+svn commit --username=Arseny --password Arseny -m "Commit #1"
+svn commit --username=Arseny --password Arseny -m "Commit #2"
+svn commit --username=Arseny --password Arseny -m "Commit #3"
+svn commit --username=Arseny --password Arseny -m "Commit #4"
+
+svn copy file:///home/s312200/misp/lab2/svn_server/branches/side_branch file:///home/s312200/misp/lab2/svn_server/branches/side_branch_2 -m "Create side_branch_2"
+svn switch file:///home/s312200/misp/lab2/svn_server/branches/side_branch_2
+svn delete "*"
+svn add boTiV5IZAc.yt1
+svn commit --username=Arseny --password Arseny -m "Commit #5"
+svn add "*"
+svn delete boTiV5IZAc.yt1
+svn commit --username=Arseny --password Arseny -m "Commit #6"
+svn commit --username=Arseny --password Arseny -m "Commit #7"
+svn switch file:///home/s312200/misp/lab2/svn_server/trunk
+svn add "*"
+svn commit --username=Ali --password Ali -m "Commit #8"
+svn switch file:///home/s312200/misp/lab2/svn_server/branches/side_branch_2
+svn commit --username=Arseny --password Arseny -m "Commit #9"
+svn switch file:///home/s312200/misp/lab2/svn_server/branches/side_branch
+svn merge file:///home/s312200/misp/lab2/svn_server/branches/side_branch_2
+svn delete --force "*"
+svn add 3EUyKcp9Lr.WFZ
+svn commit --username=Arseny --password Arseny -m "Commit #10"
+svn switch file:///home/s312200/misp/lab2/svn_server/trunk
+svn commit --username=Ali --password Ali -m "Commit #11"
+svn switch file:///home/s312200/misp/lab2/svn_server/branches/side_branch
+svn add cKVORK4LWF.gCv 
+svn commit --username=Arseny --password Arseny -m "Commit #12"
+svn switch file:///home/s312200/misp/lab2/svn_server/trunk
+svn merge file:///home/s312200/misp/lab2/svn_server/branches/side_branch
+mc
+mc
+svn delete --force cKVORK4LWF.gCv
+svn commit --username=Ali --password Ali -m "Commit #13(Merged)"
+svn commit --username=Ali --password Ali -m "Commit #14"
