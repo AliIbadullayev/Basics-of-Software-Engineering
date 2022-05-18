@@ -1,7 +1,9 @@
 ### Ant + Ivy configuration
 First we need to know how we build and run simple Java project
 #### 1. To compile the TestHello.java
+```bash
 javac -sourcepath src -cp lib/junit-4.13.2.jar:lib/hamcrest-all-1.3.jar src/test/TestHello.java -d build/classes
+```
 <img src="img/classes.png" data-canonical-src="img/classes.png" width="300" height="300" />
 
 #### 2. To run TestHello
