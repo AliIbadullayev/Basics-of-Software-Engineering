@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
+        >
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      >
+<head>
+    <title>Main</title>
+    <link rel="stylesheet" type="text/css" href="main.css"/>
+</head>
+<body>
+<ui:fragment>
+    <h1 class="header" >
+        Ибадуллаев Алибаба Эльбрус оглы<br />
+        Лабораторная работа номер 3<br />
+        группа: P3215 вариант: 521502
+    </h1>
+    <p class="datetime">
+        <span class="datetime__date"> <!-- Date from JS --> </span>
+        <br/>
+        <span class="datetime__time"> <!-- Time from JS --> </span>
+    </p>
+</ui:fragment>
+
+<h:link outcome="toIndex">
+    На основную страницу
+</h:link>
+<script type="text/javascript"
+        src="main.js">
+</script>
+</body>
+</html>

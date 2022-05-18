@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+>
+<h:head>
+    <title>
+        Ибадуллаев Алибаба Р3215 (3 лаба)
+    </title>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+</h:head>
+<h:body>
+
+
+    <section class="main-container__item_left-column__item content-section content-section_graph">
+        <h2 class="content-section__header content-section__header_graph topper">
+                    <span class="content-section__header__text">
+                        График
+                    </span>
+        </h2>
+        <div class="content-container result-graph_container" >
+            <object class="graph" type="image/svg+xml" data="graph.svg">
+
+            </object>
+            <canvas id="canvas_points" width="220" height="220">Предыдущие проверки</canvas>
+        </div>
+    </section>
+    <h:outputText id="error"/>
+    <h:form id="formID" onsubmit="return validateForm()">
+        <h:panelGrid columns="2" >
+            <h:panelGroup>X</h:panelGroup>
+            <h:panelGroup>
+
+                <h:selectBooleanCheckbox  value="#{entries.bean.x_minus_5}" title="-5" onclick="storeVar(this.title)">
+                </h:selectBooleanCheckbox><h:outputText value="-5"/>
+                <h:selectBooleanCheckbox  value="#{entries.bean.x_minus_4}" title="-4" onclick="storeVar(this.title)">
+                </h:selectBooleanCheckbox><h:outputText value="-4"/>
+                <h:selectBooleanCheckbox  value="#{entries.bean.x_minus_3}" title="-3" onclick="storeVar(this.title)">
+                </h:selectBooleanCheckbox><h:outputText value="-3"/>
+                <h:selectBooleanCheckbox  value="#{entries.bean.x_minus_2}" title="-2" onclick="storeVar(this.title)">
+                </h:selectBooleanCheckbox><h:outputText value="-2"/>
+                <h:selectBooleanCheckbox  value="#{entries.bean.x_minus_1}" title="-1" onclick="storeVar(this.title)">
+                </h:selectBooleanCheckbox><h:outputText value="-1"/>
+                <h:selectBooleanCheckbox  value="#{entries.bean.x_0}" title="0" onclick="storeVar(this.title)">
+                </h:selectBooleanCheckbox><h:outputText value="0"/>
+                <h:selectBooleanCheckbox  value="#{entries.bean.x_1}" title="1" onclick="storeVar(this.title)">
+                </h:selectBooleanCheckbox><h:outputText value="1"/>
+
+            </h:panelGroup>
+
+            <h:panelGroup>Y</h:panelGroup>
+            <h:panelGroup>
+                <h:inputText  id="y-text"
+                             maxlength="5" autocomplete="off" a:placeholder="Число от -3 до 3..."
+                             value="#{entries.bean.yValue}">
+                    <f:validateRequired/>
+                    <f:validateDoubleRange minimum="-3" maximum="3"/>
+                </h:inputText>
+            </h:panelGroup>
+
+            <h:panelGroup>Радиус</h:panelGroup>
+            <h:panelGroup>
+                <h:selectOneMenu styleClass="radius_stylesheet"
+                                 id="radius" value="#{entries.bean.radiusValue}" onchange="getRadius()">
+                    <f:selectItem  itemLabel="Choose radius" itemDisabled="true"/>
+                    <f:selectItem itemLabel="1" itemValue="1"/>
+                    <f:selectItem itemLabel="2" itemValue="2"/>
+                    <f:selectItem itemLabel="3" itemValue="3"/>
+                    <f:selectItem itemLabel="4" itemValue="4"/>
+                    <f:selectItem itemLabel="5" itemValue="5"/>
+
+                    <f:validateRequired/>
+                </h:selectOneMenu>
+            </h:panelGroup>
+        </h:panelGrid>
+        <h:commandButton value="SUBMIT" action="#{entries.addBean}"  id="submit"/>
+    <h:inputHidden id="hidden-radius"></h:inputHidden>
+    </h:form>
+
+    <h:dataTable value="#{entries.beans}" var="bean" id="result-table">
+        <h:column headerClass="result-table__column result-table__column_coords">
+            <f:facet name="header">X</f:facet>
+            <h:outputText value="#{bean.XValue}"/>
+        </h:column>
+        <h:column headerClass="result-table__column result-table__column_coords">
+            <f:facet name="header">Y</f:facet>
+            <h:outputText value="#{bean.yValue}"/>
+        </h:column>
+        <h:column headerClass="result-table__column result-table__column_coords">
+            <f:facet name="header">R</f:facet>
+            <h:outputText value="#{bean.radiusValue}"/>
+        </h:column>
+        <h:column headerClass="result-table__column result-table__column_hitres">
+            <f:facet name="header">Результат</f:facet>
+            <h:outputText value="#{bean.result}"/>
+        </h:column>
+    </h:dataTable>
+
+    <h:link styleClass="index-menu__link index-menu__link_to-main" outcome="toStart">
+        На стартовую страницу
+    </h:link>
+    <script type="text/javascript"
+            src="index.js">
+    </script>
+</h:body>
+</html>

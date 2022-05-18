@@ -1,0 +1,17 @@
+<ivy-module version="2.0">
+    <info organisation="org.apache" module="web3"/>
+
+    <configurations>
+        <conf name="compile"  description="Required to compile application"/>
+        <conf name="runtime"  description="Additional run-time dependencies" extends="compile"/>
+        <conf name="test"     description="Required for test only" extends="runtime"/>
+        <conf name="provided" description="Needed for compile, but will be present on the target platform."/>
+    </configurations>
+
+    <dependencies>
+        <dependency org="javax" name="javaee-web-api" rev="7.0"/>
+        <dependency org="javax.faces" name="jsf-api" rev="2.1" conf="provided->master"/>
+        <dependency org="org.hibernate" name="hibernate-core" rev="5.4.23.Final"/>
+        <dependency org="javax.faces" name="jsf-api" rev="2.1" conf="provided->master"/>
+    </dependencies>
+</ivy-module>

@@ -1,0 +1,90 @@
+<project name="web3" xmlns:ivy="antlib:org.apache.ivy.ant" default="compile">
+    <property name="artifactId" value="web3" />
+    <property name="version.release" value="1.0" />
+    <property name="version.snapshot" value="${version.release}-SNAPSHOT" />
+
+    <property name="lib.dir" value="lib"/>
+    <property name="build.dir" value="target"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="src.dir" value="src"/>
+    <property name="webapp.dir" value="${src.dir}/main/webapp"/>
+    <property name="java.dir" value="${src.dir}/main/java"/>
+    <property name="resources_META-INF.dir" value="${src.dir}/main/resources"/>
+    <property name="final-target.dir" value="${build.dir}/${artifactId}-${version.snapshot}"/>
+
+    <path id="lib.path.id">
+        <fileset dir="${lib.dir}">
+                <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="run.path.id">
+        <path refid="lib.path.id"/>
+    </path>
+    <path id="final-target.path.id">
+        <path location="${final-target.dir}"/>
+    </path>
+
+
+    <target name="compile" depends="resolve">
+        <mkdir dir="${build.dir}/classes"/>
+        <javac srcdir="${java.dir}" includes="**/*.java" destdir="${build.dir}/classes" includeantruntime="no">
+            <classpath refid="run.path.id"/>
+        </javac>
+        <copy todir="${build.dir}/classes">
+            <fileset dir="${resources_META-INF.dir}"/>
+        </copy>
+    </target>
+
+    <target name="build" depends="compile">
+        <mkdir dir="${final-target.dir}"/>
+        <copy todir="${final-target.dir}/">
+            <fileset dir="${webapp.dir}"/>
+        </copy>
+        <copy todir="${final-target.dir}/WEB-INF/classes">
+            <fileset dir="${classes.dir}"/>
+        </copy>
+        <copy todir="${final-target.dir}/WEB-INF/lib">
+            <fileset dir="${lib.dir}"/>
+        </copy>
+
+        <war destfile="${build.dir}/${artifactId}-${version.snapshot}.war"
+             webxml="${final-target.dir}/WEB-INF/web.xml"
+             basedir="${final-target.dir}/WEB-INF/classes"
+             includes="${final-target.dir}/WEB-INF/lib"
+        >
+            <fileset dir="${final-target.dir}"/>
+            <lib dir="${final-target.dir}/WEB-INF/lib"/>
+            <classes dir="${final-target.dir}/WEB-INF/classes"/>
+        </war>
+    </target>
+
+    <target name="run" depends="resolve" description="--> compile and run the project">
+        <mkdir dir="${build.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${build.dir}/classes" classpathref="lib.path.id" includeAntRuntime="false"/>
+        <property name="msg" value="hello ivy !"/>
+        <java classpathref="run.path.id" classname="example.HelloConsole">
+            <arg value="-message"/>
+            <arg value="${msg}"/>
+        </java>
+    </target>
+
+    <target name="resolve" description="--> retreive dependencies with ivy">
+        <ivy:retrieve/>
+    </target>
+
+    <target name="clean" description="--> clean the project">
+        <delete includeemptydirs="true">
+            <fileset dir="${basedir}">
+                <exclude name="src/**"/>
+                <exclude name="build.xml"/>
+                <exclude name="ivy.xml"/>
+            </fileset>
+        </delete>
+    </target>
+
+    <target name="clean-cache" description="--> clean the ivy cache">
+        <ivy:cleancache/>
+    </target>
+
+</project>
