@@ -1,12 +1,12 @@
-### Ant + Ivy configuration
+## Ant + Ivy configuration
 First we need to know how we build and run simple Java project
-#### 1. To compile the TestHello.java
+### 1. To compile the TestHello.java
 ```bash
 javac -sourcepath src -cp lib/junit-4.13.2.jar:lib/hamcrest-all-1.3.jar src/test/TestHello.java -d build/classes
 ```
 <img src="img/classes.png" data-canonical-src="img/classes.png" width="300" height="300" />
 
-#### 2. To run TestHello
+### 2. To run TestHello
 ```bash
 java -cp build/classes:lib/junit-4.13.2.jar:lib/hamcrest-all-1.3.jar org.junit.runner.JUnitCore test.TestHello
 ```
@@ -42,9 +42,9 @@ Then as example run project in apache-ivy-2.5.0/example/hello-ivy running comman
 Then all must be done successfull
 > Place your `apache-ivy-2.5.0.jar` into `apache-ant1.10.12/lib`
 
-##Running our project 
-###Sturcture of our project 
-####build.xml 
+## Running our project 
+### Sturcture of our project 
+#### build.xml 
 1. compile -- компиляция исходных кодов проекта.
 2. build -- компиляция исходных кодов проекта и их упаковка в исполняемый `jar`-архив. Компиляцию исходных кодов реализовать посредством вызова цели compile.
 3. clean -- удаление скомпилированных классов проекта и всех временных файлов (если они есть).
