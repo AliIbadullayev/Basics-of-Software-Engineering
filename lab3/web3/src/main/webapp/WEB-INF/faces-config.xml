@@ -28,7 +28,7 @@
 
 	<managed-bean>
 		<managed-bean-name>entries</managed-bean-name>
-		<managed-bean-class>GlobalBean</managed-bean-class>
+		<managed-bean-class>web.GlobalBean</managed-bean-class>
 		<managed-bean-scope>application</managed-bean-scope>
 	</managed-bean>
 </faces-config>

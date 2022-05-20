@@ -1,3 +1,5 @@
+package web;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -13,21 +15,27 @@ public class ManagedBean implements Serializable {
     private Integer radiusValue;
     private String result;
 
-    public boolean checkRectangle(){
-        return xValue >= -radiusValue && yValue <= radiusValue/2 && xValue <= 0 && yValue >=0;
+    public boolean checkRectangle(Coordinates coordinates, int r){
+        return coordinates.getxValue() >= -r && coordinates.getyValue() <= r/2 && coordinates.getxValue() <= 0 && coordinates.getyValue() >=0;
     }
 
-    public boolean checkTriangle(){
-        return yValue >= -2*xValue - radiusValue  && yValue <= 0 && xValue <= 0;
+    public boolean checkTriangle(Coordinates coordinates, int r){
+
+        return coordinates.getyValue() >= -2*coordinates.getxValue() - r && coordinates.getyValue() <= 0 && coordinates.getxValue() <= 0;
     }
 
-    public boolean checkCircle(){
-        return (yValue*yValue) + (xValue*xValue) <= (radiusValue*radiusValue)  && yValue <= 0 && xValue >= 0;
+    public boolean checkCircle(Coordinates coordinates, int r){
+        return (coordinates.getyValue()*coordinates.getyValue() + coordinates.getxValue()*coordinates.getxValue() <= r*r)
+                && coordinates.getyValue() <= 0 && coordinates.getxValue() >= 0;
     }
 
     public void checkHit(){
-        if (checkCircle() || checkTriangle() || checkRectangle()) result = "good";
-        else result = "bad";
+        result = isHit(xValue, yValue, radiusValue) ? "good" : "bad";
+    }
+
+    public boolean isHit(int x, float y, int r){
+        Coordinates coordinates = new Coordinates(x, y);
+        return checkCircle(coordinates, r) || checkTriangle(coordinates, r) || checkRectangle(coordinates, r);
     }
 
 

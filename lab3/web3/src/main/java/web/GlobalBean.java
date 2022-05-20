@@ -1,9 +1,14 @@
+package web;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * It is a global bean that do following: 1) Become a data from JSF pages 2) Handle with data (give result: good/bad) 3) send information back to client
+ */
 public class GlobalBean implements Serializable {
     private static final String persistenceUnit = "StudsPU";
 
@@ -21,12 +26,19 @@ public class GlobalBean implements Serializable {
         loadEntries();
     }
 
+    /**
+     * Method that generate something like manager for SQL
+     */
     private void connection() {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory(persistenceUnit);
         entityManager = entityManagerFactory.createEntityManager();
         transaction = entityManager.getTransaction();
     }
 
+
+    /**
+     * This method returns all the points for the client
+     */
     private void loadEntries() {
         try {
             transaction.begin();
@@ -47,7 +59,6 @@ public class GlobalBean implements Serializable {
             transaction.begin();
             bean.getXValue();
             bean.checkHit();
-            bean.result();
             entityManager.persist(bean);
             beans.add(bean);
             bean = new ManagedBean();

@@ -1,76 +1,116 @@
 <project name="web3" xmlns:ivy="antlib:org.apache.ivy.ant" default="compile">
+    <property file="build.properties"/>
+
     <property name="artifactId" value="web3" />
     <property name="version.release" value="1.0" />
     <property name="version.snapshot" value="${version.release}-SNAPSHOT" />
 
-    <property name="lib.dir" value="lib"/>
-    <property name="build.dir" value="target"/>
-    <property name="classes.dir" value="${build.dir}/classes"/>
-    <property name="src.dir" value="src"/>
-    <property name="webapp.dir" value="${src.dir}/main/webapp"/>
-    <property name="java.dir" value="${src.dir}/main/java"/>
-    <property name="resources_META-INF.dir" value="${src.dir}/main/resources"/>
-    <property name="final-target.dir" value="${build.dir}/${artifactId}-${version.snapshot}"/>
+    <path id="target.classes.path">
+        <fileset dir="${target.classes.dir}">
+            <include name="*"/>
+        </fileset>
+    </path>
 
-    <path id="lib.path.id">
+    <path id="src.java.path">
+        <fileset dir="${src.java.dir}">
+            <include name="*.java"/>
+        </fileset>
+    </path>
+
+    <path id="lib.path">
         <fileset dir="${lib.dir}">
                 <include name="*.jar"/>
         </fileset>
     </path>
 
-    <path id="run.path.id">
-        <path refid="lib.path.id"/>
+    <path id="run.path">
+        <path refid="lib.path"/>
+        <path refid="src.java.path"/>
     </path>
-    <path id="final-target.path.id">
+
+    <path id="test.path">
+        <pathelement path="${target.classes.dir}"/>
+        <pathelement path="${src.test.dir}"/>
+        <path refid="lib.path"/>
+    </path>
+
+    <path id="target.test.path">
+        <fileset dir="${target.test.dir}">
+            <include name="*"/>
+        </fileset>
+    </path>
+
+    <path id="classpath.test">
+        <pathelement path="${target.classes.dir}"/>
+        <pathelement path="${target.test.dir}"/>
+        <fileset dir="lib">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="final-target.path">
         <path location="${final-target.dir}"/>
     </path>
 
-
-    <target name="compile" depends="resolve">
-        <mkdir dir="${build.dir}/classes"/>
-        <javac srcdir="${java.dir}" includes="**/*.java" destdir="${build.dir}/classes" includeantruntime="no">
-            <classpath refid="run.path.id"/>
-        </javac>
-        <copy todir="${build.dir}/classes">
-            <fileset dir="${resources_META-INF.dir}"/>
-        </copy>
-    </target>
-
-    <target name="build" depends="compile">
+    <target name="build" depends="compile-tests, compile">
         <mkdir dir="${final-target.dir}"/>
         <copy todir="${final-target.dir}/">
             <fileset dir="${webapp.dir}"/>
         </copy>
         <copy todir="${final-target.dir}/WEB-INF/classes">
-            <fileset dir="${classes.dir}"/>
+            <fileset dir="${target.classes.dir}"/>
         </copy>
         <copy todir="${final-target.dir}/WEB-INF/lib">
             <fileset dir="${lib.dir}"/>
         </copy>
-
-        <war destfile="${build.dir}/${artifactId}-${version.snapshot}.war"
-             webxml="${final-target.dir}/WEB-INF/web.xml"
-             basedir="${final-target.dir}/WEB-INF/classes"
-             includes="${final-target.dir}/WEB-INF/lib"
-        >
-            <fileset dir="${final-target.dir}"/>
-            <lib dir="${final-target.dir}/WEB-INF/lib"/>
-            <classes dir="${final-target.dir}/WEB-INF/classes"/>
-        </war>
+        <jar destfile="${target.dir}/${jar.build}" basedir="${target.classes.dir}" compress="false" >
+            <manifest>
+                <attribute name="Main-Class"
+                           value="web.Main"/>
+            </manifest>
+        </jar>
     </target>
 
-    <target name="run" depends="resolve" description="--> compile and run the project">
-        <mkdir dir="${build.dir}"/>
-        <javac srcdir="${src.dir}" destdir="${build.dir}/classes" classpathref="lib.path.id" includeAntRuntime="false"/>
-        <property name="msg" value="hello ivy !"/>
-        <java classpathref="run.path.id" classname="example.HelloConsole">
-            <arg value="-message"/>
-            <arg value="${msg}"/>
-        </java>
+
+    <target name="compile" depends="resolve">
+        <mkdir dir="${target.classes.dir}"/>
+        <javac srcdir="${src.java.dir}"
+               includes="**/*.java"
+               destdir="${target.classes.dir}"
+               includeantruntime="no"
+               source="1.8" target="1.8">
+            <classpath refid="run.path"/>
+        </javac>
+        <copy todir="${target.classes.dir}">
+            <fileset dir="${resources_META-INF.dir}"/>
+        </copy>
     </target>
 
     <target name="resolve" description="--> retreive dependencies with ivy">
         <ivy:retrieve/>
+        <delete file="${lib.dir}/javax.faces-2.2.0.jar"/>
+        <delete file="${lib.dir}/javax.faces-api-2.2.jar"/>
+    </target>
+
+    <target name="compile-tests"  depends="compile">
+        <mkdir dir="${target.test.dir}"/>
+        <javac srcdir="${src.test.dir}" source="1.8" target="1.8"
+               destdir="${target.test.dir}"
+               includeantruntime="false">
+            <classpath refid="test.path"/>
+        </javac>
+    </target>
+
+    <target name="test" depends="build">
+        <echo message="--- TEST START ---"/>
+        <junit fork="true" printsummary="on" haltonerror="on" haltonfailure="on">
+            <formatter type="xml"/>
+            <classpath refid="classpath.test"/>
+            <batchtest>
+                <fileset dir="src/test/java" includes="**/*Test.java"/>
+            </batchtest>
+        </junit>
+        <echo message="--- TEST DONE ---"/>
     </target>
 
     <target name="clean" description="--> clean the project">
@@ -79,12 +119,52 @@
                 <exclude name="src/**"/>
                 <exclude name="build.xml"/>
                 <exclude name="ivy.xml"/>
+                <exclude name="build.properties"/>
+                <exclude name="keystore.jks"/>
             </fileset>
+            <fileset dir="docs" erroronmissingdir="no"/>
         </delete>
     </target>
 
-    <target name="clean-cache" description="--> clean the ivy cache">
-        <ivy:cleancache/>
+    <property name="docs.dir" value="docs"/>
+    <property name="docs.generate.dir" value="${docs.dir}/docs"/>
+
+
+    <target name="doc">
+        <signjar jar="${target.dir}/${jar.build}"
+                 alias="name"
+                 storepass="password"
+                 sigalg="MD5withRSA"
+                 digestalg="SHA1"
+                 keystore="keystore.jks"/>
+        <javadoc sourcepath="${src.java.dir}"
+                 destdir="${docs.generate.dir}"
+                 author="true"
+                 version="true"
+                 use="true">
+            <classpath>
+                <path refid="classpath.test"/>
+            </classpath>
+        </javadoc>
+        <jar destfile="${target.dir}/${artifactId}-${version.snapshot}.jar"
+             basedir="${docs.dir}"
+             update="true">
+        </jar>
     </target>
 
+    <target name="alt">
+        <replace dir="${src.java.dir}">
+            <replacefilter token="${class.name}"  value="${alt.name}"/>
+            <replacefilter token="checkCircle" value="addSalt"/>
+            <replacefilter token="result" value="cookedBean"/>
+        </replace>
+        <rename src="${src.java.dir}/web/${class.name}.java" dest="${src.java.dir}/web/${alt.name}.java"/>
+        <antcall target="build"/>
+        <rename src="${src.java.dir}/web/${alt.name}.java" dest="${src.java.dir}/web/${class.name}.java"/>
+        <replace dir="${src.java.dir}">
+            <replacefilter token="${alt.name}"  value="${class.name}"/>
+            <replacefilter token="addSalt" value="checkCircle"/>
+            <replacefilter token="cookedBean" value="result"/>
+        </replace>
+    </target>
 </project>

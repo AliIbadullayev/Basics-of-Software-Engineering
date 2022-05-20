@@ -10,8 +10,8 @@
 
     <dependencies>
         <dependency org="javax" name="javaee-web-api" rev="7.0"/>
-        <dependency org="javax.faces" name="jsf-api" rev="2.1" conf="provided->master"/>
         <dependency org="org.hibernate" name="hibernate-core" rev="5.4.23.Final"/>
-        <dependency org="javax.faces" name="jsf-api" rev="2.1" conf="provided->master"/>
+        <dependency org="junit" name="junit" rev="4.13.2" />
+        <dependency org="org.hamcrest" name="hamcrest-all" rev="1.3" />
     </dependencies>
 </ivy-module>
