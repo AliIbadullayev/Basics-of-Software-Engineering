@@ -40,3 +40,21 @@ export PATH
 
 Then as example run project in apache-ivy-2.5.0/example/hello-ivy running command `ant`
 Then all must be done successfull
+> Place your `apache-ivy-2.5.0.jar` into `apache-ant1.10.12/lib`
+
+##Running our project 
+###Sturcture of our project 
+####build.xml 
+1. compile -- компиляция исходных кодов проекта.
+2. build -- компиляция исходных кодов проекта и их упаковка в исполняемый `jar`-архив. Компиляцию исходных кодов реализовать посредством вызова цели compile.
+3. clean -- удаление скомпилированных классов проекта и всех временных файлов (если они есть).
+4. test -- запуск junit-тестов проекта. Перед запуском тестов необходимо осуществить сборку проекта (цель build).
+5. doc - добавление в `MANIFEST.MF` `MD5 и SHA-1` файлов проекта, а также генерация и добавление в архив javadoc по всем классам проекта.
+6. alt - создаёт альтернативную версию программы с измененными именами переменных и классов (используя задание replace/replaceregexp в файлах параметров) и упаковывает её в `jar`-архив. Для создания `jar`-архива использует цель build.
+
+**Before running** we must make signature of our `jar`-archive.
+For that we must run following command:
+```bash
+keytool -genkey -alias name -keyalg RSA -keypass password -storepass password -keystore keystore.jks
+```
+After that we can build our project using command `ant build`
