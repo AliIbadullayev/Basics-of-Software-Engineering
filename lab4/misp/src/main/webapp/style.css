@@ -1,0 +1,63 @@
+body *{
+    font-family: sans-serif;
+    font-style: italic;
+    color: #113da1;
+    text-align: center;
+}
+
+table {
+    width: 100%;
+
+}
+tr {
+    display: table-row;
+    background-color: #6eb0e2;
+    border:inset;
+}
+td, th{
+    text-align: center;
+    border: inset;
+    height: 0.75cm;
+}
+
+object.graph {
+    position: absolute;
+}
+
+div.content-container{
+    position: relative;
+    text-align: center;
+}
+
+input[type="submit"]{
+    height: 1cm;
+    width: 4cm;
+
+    display: block;
+    margin: 0.25cm auto 1cm;
+    border: outset;
+
+}
+input[type="submit"]:hover{
+    background-color: #add8e6;
+    font-weight: bold;
+
+}
+
+.radius_stylesheet {
+    height: 0.85cm;
+    width: 4.3cm;
+    border: inset;
+}
+
+
+input[type="checkbox"]{
+    margin-left: 0.8cm;
+}
+input[type="text"]{
+    height: 0.6cm;
+    width: 4cm;
+    border: inset;
+}
+
+

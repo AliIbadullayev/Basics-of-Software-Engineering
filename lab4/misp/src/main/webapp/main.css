@@ -1,0 +1,23 @@
+body *{
+    font-family: sans-serif;
+    font-style: italic;
+    color: #5058ba;
+    text-align: center;
+    display:block;
+    margin: auto;
+}
+
+span {
+    font-size: 2rem;
+}
+
+.datetime__date{
+    margin-top: 50px;
+}
+.datetime__time{
+    margin-bottom: 25px;
+}
+
+h1{
+    margin-top: 11rem;
+}

@@ -1,0 +1,172 @@
+<project name="web3" xmlns:ivy="antlib:org.apache.ivy.ant" default="compile">
+    <property file="build.properties"/>
+
+    <property name="artifactId" value="web3" />
+    <property name="version.release" value="1.0" />
+    <property name="version.snapshot" value="${version.release}-SNAPSHOT" />
+
+    <path id="target.classes.path">
+        <fileset dir="${target.classes.dir}">
+            <include name="*"/>
+        </fileset>
+    </path>
+
+    <path id="src.java.path">
+        <fileset dir="${src.java.dir}">
+            <include name="*.java"/>
+        </fileset>
+    </path>
+
+    <path id="lib.path">
+        <fileset dir="${lib.dir}">
+                <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="run.path">
+        <path refid="lib.path"/>
+        <path refid="src.java.path"/>
+    </path>
+
+    <path id="test.path">
+        <pathelement path="${target.classes.dir}"/>
+        <pathelement path="${src.test.dir}"/>
+        <path refid="lib.path"/>
+    </path>
+
+    <path id="target.test.path">
+        <fileset dir="${target.test.dir}">
+            <include name="*"/>
+        </fileset>
+    </path>
+
+    <path id="classpath.test">
+        <pathelement path="${target.classes.dir}"/>
+        <pathelement path="${target.test.dir}"/>
+        <fileset dir="lib">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="final-target.path">
+        <path location="${final-target.dir}"/>
+    </path>
+
+    <target name="build" depends="compile-tests, compile" description="--> build a war-archive">
+        <mkdir dir="${final-target.dir}"/>
+        <copy todir="${final-target.dir}/">
+            <fileset dir="${webapp.dir}"/>
+        </copy>
+        <copy todir="${final-target.dir}/WEB-INF/classes">
+            <fileset dir="${target.classes.dir}"/>
+        </copy>
+        <copy todir="${final-target.dir}/WEB-INF/lib">
+            <fileset dir="${lib.dir}"/>
+        </copy>
+        <war destfile="${target.dir}/${artifactId}-${version.snapshot}.war"
+             webxml="${final-target.dir}/WEB-INF/web.xml"
+             basedir="${final-target.dir}/WEB-INF/classes"
+             includes="${final-target.dir}/WEB-INF/lib">
+            <fileset dir="${final-target.dir}"/>
+            <lib dir="${lib.dir}"/>
+            <classes dir="${final-target.dir}/WEB-INF/classes"/>
+            <manifest>
+                <attribute name="Built-By" value="${groupId}"/>
+            </manifest>
+        </war>
+    </target>
+
+
+    <target name="compile" >
+        <mkdir dir="${target.classes.dir}"/>
+        <javac srcdir="${src.java.dir}"
+               includes="**/*.java"
+               destdir="${target.classes.dir}"
+               includeantruntime="no"
+               source="1.8" target="1.8">
+            <classpath refid="run.path"/>
+        </javac>
+        <copy todir="${target.classes.dir}">
+            <fileset dir="${resources_META-INF.dir}"/>
+        </copy>
+    </target>
+
+    <target name="resolve" description="--> retreive dependencies with ivy">
+        <ivy:retrieve/>
+        <delete file="${lib.dir}/javax.faces-2.2.0.jar"/>
+        <delete file="${lib.dir}/javax.faces-api-2.2.jar"/>
+    </target>
+
+    <target name="compile-tests"  depends="compile">
+        <mkdir dir="${target.test.dir}"/>
+        <javac srcdir="${src.test.dir}" source="1.8" target="1.8"
+               destdir="${target.test.dir}"
+               includeantruntime="false">
+            <classpath refid="test.path"/>
+        </javac>
+    </target>
+
+    <target name="test" depends="build" description="tests to GlobalBean class">
+        <echo message="--- TEST START ---"/>
+        <junit fork="true" printsummary="on" haltonerror="on" haltonfailure="on">
+            <formatter type="xml"/>
+            <classpath refid="classpath.test"/>
+            <batchtest>
+                <fileset dir="src/test/java" includes="**/*Test.java"/>
+            </batchtest>
+        </junit>
+        <echo message="--- TEST DONE ---"/>
+    </target>
+
+    <target name="clean" description="--> clean the project">
+        <delete includeemptydirs="true">
+            <fileset dir="${basedir}">
+                <include name="target/**"/>
+            </fileset>
+            <fileset dir="docs" erroronmissingdir="no"/>
+        </delete>
+    </target>
+
+    <property name="docs.dir" value="docs"/>
+    <property name="docs.generate.dir" value="${docs.dir}/docs"/>
+
+
+    <target name="doc" description="make documentation of project">
+        <signjar jar="${target.dir}/${jar.build}"
+                 alias="name"
+                 storepass="password"
+                 sigalg="MD5withRSA"
+                 digestalg="SHA1"
+                 keystore="keystore.jks"/>
+        <javadoc sourcepath="${src.java.dir}"
+                 destdir="${docs.generate.dir}"
+                 author="true"
+                 version="true"
+                 use="true">
+            <classpath>
+                <path refid="classpath.test"/>
+            </classpath>
+        </javadoc>
+        <jar destfile="${target.dir}/${artifactId}-${version.snapshot}.jar"
+             basedir="${docs.dir}"
+             update="true">
+        </jar>
+    </target>
+
+    <target name="alt" description="make alternative version of project">
+        <replace dir="${src.java.dir}">
+            <replacefilter token="${class.name}"  value="${alt.name}"/>
+            <replacefilter token="checkCircle" value="addSalt"/>
+            <replacefilter token="result" value="cookedBean"/>
+        </replace>
+        <rename src="${src.java.dir}/web/${class.name}.java" dest="${src.java.dir}/web/${alt.name}.java"/>
+        <antcall target="build"/>
+        <rename src="${src.java.dir}/web/${alt.name}.java" dest="${src.java.dir}/web/${class.name}.java"/>
+        <replace dir="${src.java.dir}">
+            <replacefilter token="${alt.name}"  value="${class.name}"/>
+            <replacefilter token="addSalt" value="checkCircle"/>
+            <replacefilter token="cookedBean" value="result"/>
+        </replace>
+    </target>
+</project>
+

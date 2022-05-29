@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="misp:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>misp</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="misp-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="misp:war exploded" />
+    </root>
+  </artifact>
+</component>
