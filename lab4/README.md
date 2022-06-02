@@ -36,7 +36,9 @@ Proccess of coming a notification
 
 С помощью утилиты VisualVM и профилировщика IDE NetBeans, Eclipse или Idea локализовать и устранить проблемы с производительностью в программе. По результатам локализации и устранения проблемы необходимо составить отчёт, в котором должна содержаться следующая информация:
 <img src="4.1.png">
+
 **TODO** change in `Main.java` from `Thread.sleep(200)` to `Thread.sleep(1)` 
+
 **To identify** problem we started to test where and how fast the heap was grown. We see that the `byte[]` in `VisualVM | Sampler | Memory` is growing very fast. 
 <img src="4.3.png">
 That can beacuse of memory leaks. (When the pointer to non-used object is stay with this object) and thats why Garbage Collector can't work as needed. To solve memory leak we saw the possible `static` fields (It can possibly call this problem). And after several times we seen that our program was crushed on place when it need to execute in `JavaScript.java` class `private void handleScriptException( Exception e, String badScript)` method. (in 7 of 10 situation). Then we saw that here is what we needed 
