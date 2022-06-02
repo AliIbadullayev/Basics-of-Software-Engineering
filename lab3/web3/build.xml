@@ -19,7 +19,7 @@
 
     <path id="lib.path">
         <fileset dir="${lib.dir}">
-                <include name="*.jar"/>
+            <include name="*.jar"/>
         </fileset>
     </path>
 
@@ -52,7 +52,20 @@
         <path location="${final-target.dir}"/>
     </path>
 
-    <target name="build" depends="compile-tests, compile">
+
+<!--    If ./lib exists than don't download one more time -->
+    <target name="download-lib" depends="lib.check" unless="lib.exists">
+        <antcall target="resolve"/>
+    </target>
+
+    <target name="lib.check">
+        <condition property="lib.exists">
+            <available file="${lib.dir}" type="dir"/>
+        </condition>
+    </target>
+<!--     -->
+
+    <target name="build" depends="download-lib, compile-tests, compile">
         <mkdir dir="${final-target.dir}"/>
         <copy todir="${final-target.dir}/">
             <fileset dir="${webapp.dir}"/>
@@ -72,7 +85,7 @@
     </target>
 
 
-    <target name="compile" depends="resolve">
+    <target name="compile" >
         <mkdir dir="${target.classes.dir}"/>
         <javac srcdir="${src.java.dir}"
                includes="**/*.java"
@@ -101,7 +114,7 @@
         </javac>
     </target>
 
-    <target name="test" depends="build">
+    <target name="test" depends="build" description="tests to GlobalBean class">
         <echo message="--- TEST START ---"/>
         <junit fork="true" printsummary="on" haltonerror="on" haltonfailure="on">
             <formatter type="xml"/>
@@ -116,11 +129,7 @@
     <target name="clean" description="--> clean the project">
         <delete includeemptydirs="true">
             <fileset dir="${basedir}">
-                <exclude name="src/**"/>
-                <exclude name="build.xml"/>
-                <exclude name="ivy.xml"/>
-                <exclude name="build.properties"/>
-                <exclude name="keystore.jks"/>
+                <include name="target/**"/>
             </fileset>
             <fileset dir="docs" erroronmissingdir="no"/>
         </delete>
@@ -130,12 +139,18 @@
     <property name="docs.generate.dir" value="${docs.dir}/docs"/>
 
 
-    <target name="doc">
+    <target name="doc" description="make documentation of project" depends="build">
         <signjar jar="${target.dir}/${jar.build}"
                  alias="name"
                  storepass="password"
                  sigalg="MD5withRSA"
                  digestalg="SHA1"
+                 keystore="keystore.jks"/>
+        <signjar jar="${target.dir}/${jar.build}"
+                 alias="name"
+                 storepass="password"
+                 sigalg="MD5withRSA"
+                 digestalg="MD5"
                  keystore="keystore.jks"/>
         <javadoc sourcepath="${src.java.dir}"
                  destdir="${docs.generate.dir}"
@@ -152,7 +167,7 @@
         </jar>
     </target>
 
-    <target name="alt">
+    <target name="alt" description="make alternative version of project">
         <replace dir="${src.java.dir}">
             <replacefilter token="${class.name}"  value="${alt.name}"/>
             <replacefilter token="checkCircle" value="addSalt"/>
@@ -168,3 +183,4 @@
         </replace>
     </target>
 </project>
+

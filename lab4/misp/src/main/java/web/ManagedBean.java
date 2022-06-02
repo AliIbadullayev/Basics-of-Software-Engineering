@@ -2,6 +2,7 @@ package web;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
 public class ManagedBean implements Serializable {
@@ -14,7 +15,15 @@ public class ManagedBean implements Serializable {
     private Float yValue;
     private Integer radiusValue;
     private String result;
+    private LocalDateTime time;
 
+    public LocalDateTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalDateTime time) {
+        this.time = time;
+    }
     public boolean checkRectangle(Coordinates coordinates, int r){
         return coordinates.getxValue() >= -r && coordinates.getyValue() <= (double) r/2 && coordinates.getxValue() <= 0 && coordinates.getyValue() >=0;
     }

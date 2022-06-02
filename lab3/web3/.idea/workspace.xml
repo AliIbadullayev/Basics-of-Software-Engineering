@@ -10,8 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="253c926c-6ef1-4742-90d6-9e6384998d76" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/GlobalBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/web/GlobalBean.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ManagedBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/web/ManagedBean.java" afterDir="false" />
@@ -70,7 +69,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/src/test/java" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/docs" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/abc" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="SDKs" />
     <property name="project.structure.proportion" value="0.15429688" />
@@ -79,8 +78,8 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/docs" />
       <recent name="$PROJECT_DIR$/abc" />
+      <recent name="$PROJECT_DIR$/docs" />
       <recent name="$PROJECT_DIR$/extract2" />
       <recent name="$PROJECT_DIR$/extract" />
       <recent name="C:\Users\Alibaba\Desktop\ITMO\3 семестр\Веб-программирование\web3\src\main\webapp\resource\img" />
@@ -97,17 +96,6 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="JBoss 25.0.0.Final1" type="JBossConfiguration" factoryName="Local" APPLICATION_SERVER_NAME="JBoss 25.0.0.Final1" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
       <option name="UPDATING_POLICY" value="restart-server" />
       <deployment>
@@ -202,6 +190,10 @@
       <workItem from="1652850709448" duration="2683000" />
       <workItem from="1652862942799" duration="702000" />
       <workItem from="1652993373301" duration="27761000" />
+      <workItem from="1653634609824" duration="369000" />
+      <workItem from="1653662392698" duration="295000" />
+      <workItem from="1654058578825" duration="4179000" />
+      <workItem from="1654159912813" duration="663000" />
     </task>
     <servers />
   </component>

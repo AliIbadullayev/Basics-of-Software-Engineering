@@ -1,7 +1,7 @@
 package web;
 
-import mbeans.HitProbability;
-import mbeans.PointsCounter;
+import mbeans.PointsInfo;
+import mbeans.MiddleTime;
 
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
@@ -10,8 +10,10 @@ import javax.persistence.*;
 import javax.persistence.Query;
 import java.io.Serializable;
 import java.lang.management.ManagementFactory;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -26,20 +28,20 @@ public class GlobalBean implements Serializable {
     private EntityManager entityManager;
     private EntityTransaction transaction;
     private String previousPage = null;
-    private final PointsCounter pcBean;
-    private final HitProbability hpBean;
+    private final MiddleTime mtBean;
+    private final PointsInfo piBean;
 
     public GlobalBean() throws NotCompliantMBeanException, MalformedObjectNameException, InstanceAlreadyExistsException, MBeanRegistrationException {
         bean = new ManagedBean();
         beans = new ArrayList<>();
         //init of MBeans
         MBeanServer server = ManagementFactory.getPlatformMBeanServer();
-        pcBean = new PointsCounter();
-        ObjectName pcName = new ObjectName("web:type=PointsCounter");
-        server.registerMBean(pcBean, pcName);
-        ObjectName hpName = new ObjectName("web:type=HitProbability");
-        hpBean = new HitProbability();
-        server.registerMBean(hpBean, hpName);
+        mtBean = new MiddleTime();
+        ObjectName mtName = new ObjectName("web:type=MiddleTime");
+        server.registerMBean(mtBean, mtName);
+        ObjectName piName = new ObjectName("web:type=PointsInfo");
+        piBean = new PointsInfo();
+        server.registerMBean(piBean, piName);
 
         connection();
         loadEntries();
@@ -65,10 +67,10 @@ public class GlobalBean implements Serializable {
             beans = query.getResultList();
             transaction.commit();
 
-            hpBean.setHits(loadHit());
-            hpBean.setTotalPoints(beans.size());
+            piBean.setHits(loadHit());
+            piBean.setTotalPoints(beans.size());
 
-            pcBean.setTotalPoints(beans.size());
+            mtBean.setTimes(beans.stream().map(ManagedBean::getTime).collect(Collectors.toList()));
         } catch (RuntimeException exception) {
             if (transaction.isActive()) {
                 transaction.rollback();
@@ -81,12 +83,16 @@ public class GlobalBean implements Serializable {
     public String addBean() {
         try {
             transaction.begin();
+            bean.setTime(LocalDateTime.now());
             bean.checkHit();
             entityManager.persist(bean);
-            bean = new ManagedBean();
             transaction.commit();
 
-            pcBean.incrementPointsCount();
+            if (bean.getResult().equals("bad")) piBean.incrementBadResult();
+            else piBean.setBadResult(0);
+
+            bean = new ManagedBean();
+
         } catch (RuntimeException exception) {
             if (transaction.isActive()) {
                 transaction.rollback();

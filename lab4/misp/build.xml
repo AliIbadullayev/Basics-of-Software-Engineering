@@ -52,7 +52,18 @@
         <path location="${final-target.dir}"/>
     </path>
 
-    <target name="build" depends="compile-tests, compile" description="--> build a war-archive">
+    <target name="download-lib" depends="lib.check" unless="lib.exists">
+        <antcall target="resolve"/>
+    </target>
+
+    <target name="lib.check">
+        <condition property="lib.exists">
+            <available file="${lib.dir}" type="dir"/>
+        </condition>
+    </target>
+    <!--     -->
+
+    <target name="build" depends="download-lib, compile-tests, compile">
         <mkdir dir="${final-target.dir}"/>
         <copy todir="${final-target.dir}/">
             <fileset dir="${webapp.dir}"/>
