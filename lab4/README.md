@@ -15,7 +15,7 @@ To run, go into jdk on which was build your project (Look in `File | Project Str
 * Download plugin for MBeans `Tools | Plugins | MBEANS`
 ### Lab's work process 
 #### Jconsole 
-С помощью утилиты JConsole провести мониторинг программы:
+* С помощью утилиты JConsole провести мониторинг программы:
 
 1. Снять показания MBean-классов, разработанных в ходе выполнения задания 1.
 <img src="img/2.1_1.png">
@@ -23,7 +23,7 @@ To run, go into jdk on which was build your project (Look in `File | Project Str
 2. Определить версию Java Language Specification, реализуемую данной средой исполнения.
 <img src="img/2.2.png">
 
-С помощью утилиты VisualVM провести мониторинг и профилирование программы:
+* С помощью утилиты VisualVM провести мониторинг и профилирование программы:
 
 1. Снять график изменения показаний MBean-классов, разработанных в ходе выполнения задания 1, с течением времени.
 <img src="img/3.1_1.png">
@@ -34,15 +34,15 @@ Proccess of coming a notification
 2. Определить имя потока, потребляющего наибольший процент времени CPU.
 <img src="img/3.2.png">
 
-С помощью утилиты VisualVM и профилировщика IDE NetBeans, Eclipse или Idea локализовать и устранить проблемы с производительностью в программе. По результатам локализации и устранения проблемы необходимо составить отчёт, в котором должна содержаться следующая информация:
-<img src="4.1.png">
+* С помощью утилиты VisualVM и профилировщика IDE NetBeans, Eclipse или Idea локализовать и устранить проблемы с производительностью в программе. По результатам локализации и устранения проблемы необходимо составить отчёт, в котором должна содержаться следующая информация:
+<img src="img/4.1.png">
 
 **TODO** change in `Main.java` from `Thread.sleep(200)` to `Thread.sleep(1)` 
 
 **To identify** problem we started to test where and how fast the heap was grown. We see that the `byte[]` in `VisualVM | Sampler | Memory` is growing very fast. 
-<img src="4.3.png">
+<img src="img/4.3.png">
 That can beacuse of memory leaks. (When the pointer to non-used object is stay with this object) and thats why Garbage Collector can't work as needed. To solve memory leak we saw the possible `static` fields (It can possibly call this problem). And after several times we seen that our program was crushed on place when it need to execute in `JavaScript.java` class `private void handleScriptException( Exception e, String badScript)` method. (in 7 of 10 situation). Then we saw that here is what we needed 
-<img src="4.2.png">
+<img src="img/4.2.png">
 ``` java 
  private static ArrayList _errorMessages = new ArrayList();
  ...
