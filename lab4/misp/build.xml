@@ -96,6 +96,7 @@
                includeantruntime="no"
                source="1.8" target="1.8">
             <classpath refid="run.path"/>
+            <compilerarg value="-noverify"/>
         </javac>
         <copy todir="${target.classes.dir}">
             <fileset dir="${resources_META-INF.dir}"/>

@@ -22,7 +22,7 @@ public class MiddleTime implements MiddleTimeMBean {
         for (int i = 0; i < times.size() - 1; i++) {
             LocalDateTime time1 = times.get(i);
             LocalDateTime time2 = times.get(i + 1);
-            sum_of_hours += Duration.between(time1, time2).toMillis();
+            sum_of_hours += Duration.between(time1, time2).toMillis()/1000;
         }
         return sum_of_hours / times.size();
     }
